@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaRealFi - AI Analytics Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tensorflow@3.11.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tfjs-vis.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@antv/g2plot@2.4.31/dist/g2plot.min.js"></script>
+  <link rel="stylesheet" href="../styles/dashboard.css">
+  <link rel="stylesheet" href="dashboard-embedded.css">
+  </style>
+</head>
+<body class="min-h-screen">
+  <div id="header-container" class="fixed top-0 left-0 right-0 bg-primary-dark z-40 border-b border-gray-800">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center gap-4">
+        <h1 class="text-xl font-bold gradient-text">MetaRealFi</h1>
+      </div>
+      <div class="nav-links hidden md:flex gap-4 items-center">
+        <a href="properties.html" class="text-indigo-200 hover:text-white transition-colors restricted">Properties</a>
+        <a href="dashboard.html" class="text-indigo-200 hover:text-white transition-colors restricted">Dashboard</a>
+        <a href="transactions.html" class="text-indigo-200 hover:text-white transition-colors restricted">Transactions</a>
+        <div class="flex items-center gap-4 ml-4 pl-4 border-l border-indigo-500/20">
+          <button class="text-indigo-200 hover:text-white transition-colors relative">
+            <i class="fas fa-bell text-lg"></i>
+            <span class="absolute -top-1 -right-1 w-2 h-2 bg-indigo-500 rounded-full"></span>
+          </button>
+          <div class="relative group">
+            <button class="flex items-center gap-2 text-indigo-200 hover:text-white transition-colors">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-medium">JD</div>
+              <span class="font-medium">John Doe</span>
+              <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+            </button>
+            <div class="absolute right-0 top-full mt-2 w-48 py-2 bg-indigo-950/95 backdrop-blur-lg border border-indigo-500/20 rounded-lg shadow-xl invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all">
+              <a href="#" class="flex items-center gap-2 px-4 py-2 text-indigo-200 hover:text-white hover:bg-indigo-500/10 transition-colors">
+                <i class="fas fa-user-circle w-4"></i>
+                <span>Profile</span>
+              </a>
+              <a href="#" class="flex items-center gap-2 px-4 py-2 text-indigo-200 hover:text-white hover:bg-indigo-500/10 transition-colors">
+                <i class="fas fa-cog w-4"></i>
+                <span>Settings</span>
+              </a>
+              <div class="border-t border-indigo-500/20 my-1"></div>
+              <a href="#" class="flex items-center gap-2 px-4 py-2 text-indigo-200 hover:text-white hover:bg-indigo-500/10 transition-colors">
+                <i class="fas fa-sign-out-alt w-4"></i>
+                <span>Sign Out</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="container mx-auto px-6 pt-24 pb-12 space-y-10">
+    <!-- Smart Header with AI Search -->
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 bg-indigo-950/30 p-6 rounded-xl border border-indigo-500/20">
+      <div class="w-full md:w-auto">
+        <div class="relative group w-full md:w-96">
+          <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+            <!-- <i class="fas fa-robot text-indigo-400"></i> -->
+          </div>
+          <input type="text" placeholder="Ask anything about your investments..." class="search-input w-full pl-10 pr-12 py-3 bg-indigo-950/50 border border-indigo-500/20 focus:border-indigo-500 rounded-xl">
+          <div class="absolute inset-y-0 right-3 flex items-center">
+            <button class="text-indigo-400 hover:text-indigo-300 transition-colors">
+              <i class="fas fa-microphone"></i>
+            </button>
+          </div>
+          <!-- AI Suggestions Dropdown -->
+          <div class="absolute left-0 right-0 top-full mt-2 p-2 bg-indigo-950/95 backdrop-blur-lg border border-indigo-500/20 rounded-lg shadow-xl invisible group-focus-within:visible opacity-0 group-focus-within:opacity-100 transition-all z-20">
+            <div class="text-xs text-indigo-300 mb-2 px-2">Suggested Queries</div>
+            <button class="w-full text-left px-3 py-2 text-sm text-indigo-200 hover:bg-indigo-500/10 rounded transition-colors">
+              <i class="fas fa-chart-line mr-2 text-indigo-400"></i>Show ROI trends for last quarter
+            </button>
+            <button class="w-full text-left px-3 py-2 text-sm text-indigo-200 hover:bg-indigo-500/10 rounded transition-colors">
+              <i class="fas fa-building mr-2 text-indigo-400"></i>Compare property performance
+            </button>
+            <button class="w-full text-left px-3 py-2 text-sm text-indigo-200 hover:bg-indigo-500/10 rounded transition-colors">
+              <i class="fas fa-brain mr-2 text-indigo-400"></i>Generate investment insights
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 w-full md:w-auto">
+        <button id="aiInsightsBtn" class="btn-secondary flex-1 md:flex-none">
+          <i class="fas fa-brain mr-2"></i>AI Insights
+        </button>
+        <button id="withdrawBtn" class="btn-primary flex-1 md:flex-none">
+          <i class="fas fa-wallet mr-2"></i>Withdraw
+        </button>
+        <button id="referralBtn" class="btn-secondary flex-1 md:flex-none">
+          <i class="fas fa-user-plus mr-2"></i>Refer
+        </button>
+      </div>
+    </header>
+
+    <!-- AI Insights Panel -->
+    <div id="aiInsightsPanel" class="dashboard-card mb-8 bg-gradient-to-br from-indigo-950 to-purple-950 border border-indigo-500/20" style="display: none;">
+      <div class="flex items-start justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+            <i class="fas fa-brain text-white"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold">AI Investment Insights</h3>
+            <p class="text-sm text-indigo-300">Powered by Advanced Analytics</p>
+          </div>
+        </div>
+        <button onclick="toggleAIInsights()" class="text-indigo-300 hover:text-white transition-colors">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-4 bg-indigo-950/50 rounded-lg border border-indigo-500/20">
+          <div class="flex items-center gap-2 mb-3">
+            <i class="fas fa-chart-line text-green-400"></i>
+            <h4 class="font-medium">Market Opportunity</h4>
+          </div>
+          <p class="text-sm text-indigo-200 mb-3">Detected a 15% undervaluation in the downtown commercial sector. Consider increasing exposure.</p>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-indigo-300">Confidence</span>
+            <span class="text-green-400">92%</span>
+          </div>
+        </div>
+        <div class="p-4 bg-indigo-950/50 rounded-lg border border-indigo-500/20">
+          <div class="flex items-center gap-2 mb-3">
+            <i class="fas fa-shield-alt text-blue-400"></i>
+            <h4 class="font-medium">Risk Alert</h4>
+          </div>
+          <p class="text-sm text-indigo-200 mb-3">Portfolio concentration in residential sector exceeds optimal threshold. Consider diversification.</p>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-indigo-300">Priority</span>
+            <span class="text-yellow-400">Medium</span>
+          </div>
+        </div>
+        <div class="p-4 bg-indigo-950/50 rounded-lg border border-indigo-500/20">
+          <div class="flex items-center gap-2 mb-3">
+            <i class="fas fa-lightbulb text-purple-400"></i>
+            <h4 class="font-medium">Smart Recommendation</h4>
+          </div>
+          <p class="text-sm text-indigo-200 mb-3">AI model predicts 20% ROI potential in emerging tech hub properties within 6 months.</p>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-indigo-300">Opportunity Score</span>
+            <span class="text-purple-400">8.5/10</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI-Powered Analytics Dashboard -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+      <!-- Investment Value Card with AI Predictions -->
+      <div class="dashboard-card stat-card group hover:z-10" data-aos="fade-up">
+        <div class="relative overflow-hidden">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-lg font-semibold">Investment Value</h3>
+            <div class="relative group">
+              <button class="text-blue-400 hover:text-blue-300 transition-colors">
+                <i class="fas fa-robot"></i>
+              </button>
+              <div class="absolute right-0 top-full mt-2 w-64 p-4 bg-indigo-950/95 backdrop-blur-lg border border-indigo-500/20 rounded-lg shadow-xl invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all z-20">
+                <h4 class="text-sm font-semibold mb-2">AI Insights</h4>
+                <p class="text-xs text-indigo-200 mb-2">Predicted 12% growth potential in the next quarter based on market trends and property appreciation rates.</p>
+                <div class="flex items-center gap-2 text-xs text-green-400">
+                  <i class="fas fa-chart-line"></i>
+                  <span>High confidence prediction</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="flex-1">
+              <p class="text-3xl font-bold gradient-text">$55,000</p>
+              <div class="flex items-center mt-2">
+                <span class="text-sm text-green-400"><i class="fas fa-arrow-up mr-1"></i>+5.8%</span>
+                <span class="text-xs text-indigo-300 ml-2">vs last month</span>
+              </div>
+            </div>
+            <div class="w-16 h-16 relative">
+              <svg class="w-full h-full transform -rotate-90">
+                <circle cx="32" cy="32" r="28" stroke="#1e293b" stroke-width="4" fill="none"/>
+                <circle cx="32" cy="32" r="28" stroke="url(#gradient)" stroke-width="4" fill="none" stroke-dasharray="175.9" stroke-dashoffset="44"/>
+              </svg>
+              <span class="absolute inset-0 flex items-center justify-center text-sm font-medium">75%</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-indigo-300">
+            <span>Portfolio Health</span>
+            <span>Excellent</span>
+          </div>
+          </div>
+          <div id="investmentPrediction" class="absolute inset-0 bg-secondary-dark bg-opacity-95 backdrop-blur-sm p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h4 class="font-semibold text-blue-400 mb-2">AI Growth Forecast</h4>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-sm">Next Month</span>
+                <span class="text-green-400">+7.2%</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm">Q4 2023</span>
+                <span class="text-green-400">+15.5%</span>
+              </div>
+              <div class="text-xs text-gray-400 mt-2">Based on market trends and ML predictions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-card stat-card group hover:z-10" data-aos="fade-up" data-aos-delay="100">
+        <div class="relative overflow-hidden">
+          <h3 class="text-lg font-semibold mb-2">Total Earnings</h3>
+          <p class="text-3xl font-bold gradient-text">$2,500</p>
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-green-400"><i class="fas fa-arrow-up mr-1"></i>+12.3% this month</p>
+            <div class="text-xs text-purple-400 cursor-pointer hover:text-purple-300" onclick="showAIPrediction('earnings')"><i class="fas fa-chart-line mr-1"></i>Forecast</div>
+          </div>
+          <div id="earningsPrediction" class="absolute inset-0 bg-secondary-dark bg-opacity-95 backdrop-blur-sm p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h4 class="font-semibold text-purple-400 mb-2">Revenue Forecast</h4>
+            <canvas id="miniEarningsChart" class="h-20 w-full"></canvas>
+            <div class="text-xs text-gray-400 mt-2">AI-powered 3-month projection</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-card stat-card group hover:z-10" data-aos="fade-up" data-aos-delay="200">
+        <div class="relative overflow-hidden">
+          <h3 class="text-lg font-semibold mb-2">Properties Owned</h3>
+          <p class="text-3xl font-bold gradient-text">3</p>
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-blue-400">12 tokens</p>
+            <div class="text-xs text-green-400 cursor-pointer hover:text-green-300" onclick="show3DVisualization()"><i class="fas fa-cube mr-1"></i>View 3D</div>
+          </div>
+          <div id="propertyVisualization" class="absolute inset-0 bg-secondary-dark bg-opacity-95 backdrop-blur-sm p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <div id="property3DContainer" class="h-full w-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-card stat-card group hover:z-10" data-aos="fade-up" data-aos-delay="300">
+        <div class="relative overflow-hidden">
+          <h3 class="text-lg font-semibold mb-2">Available Balance</h3>
+          <p class="text-3xl font-bold gradient-text">$1,200</p>
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-400">Ready to withdraw</p>
+            <div class="text-xs text-yellow-400 cursor-pointer hover:text-yellow-300" onclick="showSmartRecommendations()"><i class="fas fa-lightbulb mr-1"></i>Smart Tips</div>
+          </div>
+          <div id="smartRecommendations" class="absolute inset-0 bg-secondary-dark bg-opacity-95 backdrop-blur-sm p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h4 class="font-semibold text-yellow-400 mb-2">Smart Recommendations</h4>
+            <ul class="text-sm space-y-2">
+              <li class="flex items-center"><i class="fas fa-chart-pie text-blue-400 mr-2"></i>Reinvest: $800 (Optimal)</li>
+              <li class="flex items-center"><i class="fas fa-piggy-bank text-green-400 mr-2"></i>Save: $300</li>
+              <li class="flex items-center"><i class="fas fa-wallet text-purple-400 mr-2"></i>Withdraw: $100</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Investment Insights -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
+      <div class="dashboard-card" data-aos="fade-up">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold">AI Investment Insights</h2>
+          <div class="flex items-center space-x-2">
+            <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">Live Updates</span>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <div class="p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-semibold text-blue-400">Predictive Analytics</h3>
+              <span class="text-sm text-blue-400">98% Confidence</span>
+            </div>
+            <p class="text-gray-300 mb-3">Based on current market trends and AI analysis:</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-center"><i class="fas fa-chart-line text-green-400 mr-2"></i>Expected 12% ROI increase in next quarter</li>
+              <li class="flex items-center"><i class="fas fa-building text-blue-400 mr-2"></i>Optimal property type: Luxury Condos</li>
+              <li class="flex items-center"><i class="fas fa-map-marker-alt text-purple-400 mr-2"></i>Emerging market: Downtown Metro Area</li>
+            </ul>
+          </div>
+          
+          <div class="p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-500/20">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-semibold text-purple-400">Portfolio Optimization</h3>
+              <span class="text-sm text-purple-400">Rebalance Suggested</span>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-3">
+              <div class="text-center p-3 bg-gray-800/50 rounded-lg">
+                <p class="text-sm text-gray-400">Current Risk Score</p>
+                <p class="text-xl font-bold text-yellow-400">7.2</p>
+              </div>
+              <div class="text-center p-3 bg-gray-800/50 rounded-lg">
+                <p class="text-sm text-gray-400">Optimal Risk Score</p>
+                <p class="text-xl font-bold text-green-400">6.5</p>
+              </div>
+            </div>
+            <button class="w-full py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors">
+              View Optimization Plan
+            </button>
+          </div>
+        </div>
+      </div>
+
+       <!-- Revenue and Customer Analytics -->
+      <div class="dashboard-card" data-aos="fade-up">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold">Revenue Analytics</h2>
+          <div class="flex items-center space-x-2">
+            <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">Real-time Data</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20">
+            <h3 class="font-semibold text-blue-400 mb-4">Revenue Trend</h3>
+            <div class="chart-container">
+              <canvas id="revenueTrendChart"></canvas>
+            </div>
+          </div>
+          <div class="p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-500/20">
+            <h3 class="font-semibold text-purple-400 mb-4">Customer Distribution</h3>
+            <div class="chart-container">
+              <canvas id="customerDistributionChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Market Sentiment Analyzer -->
+      <div class="dashboard-card" data-aos="fade-up">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold">Market Sentiment Analyzer</h2>
+          <div class="flex items-center space-x-2">
+            <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">Real-time Analysis</span>
+          </div>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="p-4 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-lg border border-green-500/20">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold text-green-400">Market Sentiment Score</h3>
+              <div class="flex items-center space-x-2">
+                <span class="text-2xl font-bold text-green-400">8.5</span>
+                <span class="text-sm text-green-400">/ 10</span>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div class="p-3 bg-gray-800/50 rounded-lg">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm text-gray-400">Buy Signals</span>
+                  <span class="text-green-400">85%</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div class="bg-green-400 h-2 rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+              
+              <div class="p-3 bg-gray-800/50 rounded-lg">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm text-gray-400">Sell Signals</span>
+                  <span class="text-red-400">15%</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div class="bg-red-400 h-2 rounded-full" style="width: 15%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-lg border border-blue-500/20">
+              <h4 class="font-semibold text-blue-400 mb-3">Trending Markets</h4>
+              <ul class="space-y-2">
+                <li class="flex items-center justify-between">
+                  <span class="text-sm">Downtown Condos</span>
+                  <span class="text-green-400">+18.5%</span>
+                </li>
+                <li class="flex items-center justify-between">
+                  <span class="text-sm">Tech Hub Office</span>
+                  <span class="text-green-400">+12.3%</span>
+                </li>
+                <li class="flex items-center justify-between">
+                  <span class="text-sm">Retail Spaces</span>
+                  <span class="text-red-400">-5.2%</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="p-4 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-lg border border-indigo-500/20">
+              <h4 class="font-semibold text-indigo-400 mb-3">Market Indicators</h4>
+              <ul class="space-y-2">
+                <li class="flex items-center justify-between">
+                  <span class="text-sm">Supply Index</span>
+                  <span class="text-yellow-400">Moderate</span>
+                </li>
+                <li class="flex items-center justify-between">
+                  <span class="text-sm">Demand Pressure</span>
+                  <span class="text-green-400">High</span>
+                </li>
+                <li class="flex items-center justify-between">
+                  <span class="text-sm">Price Stability</span>
+                  <span class="text-blue-400">Stable</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transaction History -->
+      <div class="dashboard-card" data-aos="fade-up">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold">Transaction History</h2>
+          <select id="transactionFilter" class="bg-transparent border border-gray-600 rounded-lg px-3 py-1">
+            <option value="all">All Transactions</option>
+            <option value="purchase">Purchases</option>
+            <option value="dividend">Dividends</option>
+            <option value="withdrawal">Withdrawals</option>
+          </select>
+        </div>
+        <div class="space-y-4 max-h-[400px] overflow-y-auto">
+          <!-- Transaction Items -->
+          <div class="transaction-item" data-type="purchase">
+            <div class="flex items-center justify-between p-4 rounded-lg bg-opacity-50 hover:bg-opacity-75 transition-all duration-300 bg-gray-800">
+              <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+                  <i class="fas fa-home text-white"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold">Token Purchase</h4>
+                  <p class="text-sm text-gray-400">Luxury Condo #123</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="font-semibold text-green-400">+$5,000</p>
+                <p class="text-sm text-gray-400">2023-10-15</p>
+              </div>
+            </div>
+          </div>
+          <div class="transaction-item" data-type="dividend">
+            <div class="flex items-center justify-between p-4 rounded-lg bg-opacity-50 hover:bg-opacity-75 transition-all duration-300 bg-gray-800">
+              <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
+                  <i class="fas fa-dollar-sign text-white"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold">Dividend Payment</h4>
+                  <p class="text-sm text-gray-400">Monthly Rental Income</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="font-semibold text-green-400">+$350</p>
+                <p class="text-sm text-gray-400">2023-10-01</p>
+              </div>
+            </div>
+          </div>
+          <div class="transaction-item" data-type="withdrawal">
+            <div class="flex items-center justify-between p-4 rounded-lg bg-opacity-50 hover:bg-opacity-75 transition-all duration-300 bg-gray-800">
+              <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center">
+                  <i class="fas fa-wallet text-white"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold">Withdrawal</h4>
+                  <p class="text-sm text-gray-400">To Bank Account</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="font-semibold text-red-400">-$1,000</p>
+                <p class="text-sm text-gray-400">2023-09-28</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+      <div class="bg-secondary-dark rounded-xl p-6 max-w-md w-full mx-4">
+        <h3 class="text-xl font-bold mb-4">Withdraw Earnings</h3>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2">Available Balance</label>
+          <p class="text-2xl font-bold gradient-text">$1,200</p>
+        </div>
+        <div class="mb-6">
+          <label for="withdrawAmount" class="block text-sm font-medium mb-2">Amount to Withdraw</label>
+          <input type="number" id="withdrawAmount" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:border-accent-blue" placeholder="Enter amount">
+        </div>
+        <div class="flex space-x-4">
+          <button id="confirmWithdraw" class="flex-1 bg-gradient-to-r from-accent-blue to-accent-purple text-white rounded-lg py-2 hover:opacity-90 transition-opacity">Confirm Withdrawal</button>
+          <button id="cancelWithdraw" class="flex-1 bg-gray-700 text-white rounded-lg py-2 hover:bg-gray-600 transition-colors">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Refer & Earn Modal -->
+    <div id="referralModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+      <div class="bg-secondary-dark rounded-xl p-6 max-w-md w-full mx-4">
+        <h3 class="text-xl font-bold mb-4">Refer & Earn</h3>
+        <p class="text-gray-400 mb-4">Share your referral link and earn 5% of your referral's first investment!</p>
+        <div class="mb-6">
+          <label class="block text-sm font-medium mb-2">Your Referral Link</label>
+          <div class="flex">
+            <input type="text" id="referralLink" class="flex-1 bg-gray-700 border border-gray-600 rounded-l-lg px-4 py-2" value="https://metarealfi.com/ref/user123" readonly>
+            <button id="copyLink" class="bg-accent-blue text-white px-4 rounded-r-lg hover:opacity-90 transition-opacity">Copy</button>
+          </div>
+        </div>
+        <div class="text-center">
+          <button id="closeReferral" class="bg-gray-700 text-white px-8 py-2 rounded-lg hover:bg-gray-600 transition-colors">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Advanced Analytics Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- Market Intelligence Chart -->
+      <div class="dashboard-card" data-aos="fade-up">
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-lg font-semibold">Market Intelligence</h3>
+          <div class="flex items-center gap-2">
+            <button class="text-xs px-2 py-1 rounded bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 transition-colors" onclick="updateTimeframe('1W')">1W</button>
+            <button class="text-xs px-2 py-1 rounded bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 transition-colors" onclick="updateTimeframe('1M')">1M</button>
+            <button class="text-xs px-2 py-1 rounded bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 transition-colors" onclick="updateTimeframe('3M')">3M</button>
+            <button class="text-xs px-2 py-1 rounded bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 transition-colors" onclick="updateTimeframe('1Y')">1Y</button>
+          </div>
+        </div>
+        <div class="chart-container relative">
+          <div id="marketIntelligenceChart"></div>
+          <div class="absolute top-0 right-0 p-2 bg-indigo-950/80 backdrop-blur-sm rounded-lg text-xs">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+              <span>Market Value</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+              <span>Predicted Trend</span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 p-3 bg-indigo-500/10 rounded-lg">
+          <div class="flex items-start gap-2">
+            <i class="fas fa-robot text-indigo-400 mt-1"></i>
+            <div>
+              <h4 class="text-sm font-semibold mb-1">AI Market Analysis</h4>
+              <p class="text-xs text-indigo-200">Our AI predicts a 15% market value increase in the next quarter based on historical patterns and current market indicators.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-card stat-card">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm text-gray-400">Properties for Rent</p>
+            <h3 class="text-2xl font-bold mt-1">546</h3>
+          </div>
+          <svg class="progress-ring w-12 h-12">
+            <circle cx="24" cy="24" r="20" stroke="#8b5cf6" stroke-width="4" fill="none" stroke-dasharray="125.6" stroke-dashoffset="62.8"></circle>
+          </svg>
+        </div>
+        <p class="text-sm text-red-400 mt-2"><i class="fas fa-arrow-down mr-1"></i>3% decrease</p>
+      </div>
+
+      <div class="dashboard-card stat-card">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm text-gray-400">Total Customers</p>
+            <h3 class="text-2xl font-bold mt-1">5,732</h3>
+          </div>
+          <svg class="progress-ring w-12 h-12">
+            <circle cx="24" cy="24" r="20" stroke="#10b981" stroke-width="4" fill="none" stroke-dasharray="125.6" stroke-dashoffset="31.4"></circle>
+          </svg>
+        </div>
+        <p class="text-sm text-green-400 mt-2"><i class="fas fa-arrow-up mr-1"></i>8% increase</p>
+      </div>
+
+      <div class="dashboard-card stat-card">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm text-gray-400">Total Cities</p>
+            <h3 class="text-2xl font-bold mt-1">90</h3>
+          </div>
+          <svg class="progress-ring w-12 h-12">
+            <circle cx="24" cy="24" r="20" stroke="#f472b6" stroke-width="4" fill="none" stroke-dasharray="125.6" stroke-dashoffset="94.2"></circle>
+          </svg>
+        </div>
+        <p class="text-sm text-green-400 mt-2"><i class="fas fa-arrow-up mr-1"></i>2% increase</p>
+      </div>
+    </div>
+
+    <!-- Charts and Analytics -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div class="dashboard-card lg:col-span-2">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-semibold">Revenue Overview</h2>
+          <div class="flex items-center space-x-2 text-sm">
+            <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-accent-blue mr-1"></span>Last Month</span>
+            <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-accent-purple mr-1"></span>Current Month</span>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+
+      <div class="dashboard-card">
+        <h2 class="text-xl font-semibold mb-6">Property Referrals</h2>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span>Social Media</span>
+            <span class="text-sm text-gray-400">64%</span>
+          </div>
+          <div class="w-full bg-gray-700 rounded-full h-2">
+            <div class="bg-accent-blue h-2 rounded-full" style="width: 64%"></div>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <span>Marketplaces</span>
+            <span class="text-sm text-gray-400">40%</span>
+          </div>
+          <div class="w-full bg-gray-700 rounded-full h-2">
+            <div class="bg-accent-purple h-2 rounded-full" style="width: 40%"></div>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <span>Websites</span>
+            <span class="text-sm text-gray-400">50%</span>
+          </div>
+          <div class="w-full bg-gray-700 rounded-full h-2">
+            <div class="bg-green-500 h-2 rounded-full" style="width: 50%"></div>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <span>Digital Ads</span>
+            <span class="text-sm text-gray-400">80%</span>
+          </div>
+          <div class="w-full bg-gray-700 rounded-full h-2">
+            <div class="bg-pink-500 h-2 rounded-full" style="width: 80%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Latest Transactions -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="dashboard-card lg:col-span-2">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-semibold">Latest Sales</h2>
+          <button class="text-sm text-accent-blue hover:text-accent-purple transition-colors">View All</button>
+        </div>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+            <div class="flex items-center space-x-4">
+              <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9" class="property-image" alt="Property">
+              <div>
+                <h4 class="font-medium">Metro Jayakar Apartment</h4>
+                <p class="text-sm text-gray-400">North Carolina, USA</p>
+              </div>
+            </div>
+            <span class="text-green-400">+$35</span>
+          </div>
+
+          <div class="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+            <div class="flex items-center space-x-4">
+              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" class="property-image" alt="Property">
+              <div>
+                <h4 class="font-medium">Letdo Ji Hotel & Apartment</h4>
+                <p class="text-sm text-gray-400">Carolina North, UK</p>
+              </div>
+            </div>
+            <span class="text-green-400">+$40</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-card">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-semibold">Top Agents</h2>
+          <button class="text-sm text-accent-blue hover:text-accent-purple transition-colors">View All</button>
+        </div>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="agent-avatar flex items-center justify-center text-white">BC</div>
+              <div>
+                <h4 class="font-medium">Benny Chagur</h4>
+                <p class="text-sm text-gray-400">Top Agent</p>
+              </div>
+            </div>
+            <button class="text-gray-400 hover:text-white transition-colors">
+              <i class="fas fa-ellipsis-v"></i>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="agent-avatar flex items-center justify-center text-white">CH</div>
+              <div>
+                <h4 class="font-medium">Chynita Heree</h4>
+                <p class="text-sm text-gray-400">Top Agent</p>
+              </div>
+            </div>
+            <button class="text-gray-400 hover:text-white transition-colors">
+              <i class="fas fa-ellipsis-v"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaRealFi - Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="frontend\styles\styles.css">
+</head>
+<body class="min-h-screen bg-white">
+  <!-- Include Header -->
+  <div id="header-container"></div>
+
+  <main class="pt-20">
+    <!-- Video Background -->
+    <div class="video-background">
+      <video autoplay muted loop playsinline>
+        <source src="../assets/4389377-uhd_3840_2024_30fps.mp4" type="video/mp4">
+      </video>
+    </div>
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-indigo-900/50 to-indigo-950/90 z-0"></div>
+      <div class="bg-pattern" style="background-image: url('../assets/hero-pattern.svg'); background-size: cover; background-position: center; opacity: 0.85; backdrop-filter: blur(8px);"></div>
+      <div class="curved-overlay"></div>
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-4xl mx-auto text-center transform hover:scale-105 transition-transform duration-700">
+          <h2 class="text-6xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 bg-clip-text text-transparent hover:from-pink-500 hover:via-purple-500 hover:to-indigo-400 transition-all duration-700 ease-in-out transform hover:-translate-y-2">Transform Your Real Estate Investment Journey</h2>
+          <p class="text-xl md:text-2xl text-indigo-200 mb-12 opacity-0 animate-fade-in-up delay-300">Experience the future of property investment with blockchain-powered fractional ownership</p>
+          <div class="flex justify-center gap-6 opacity-0 animate-fade-in-up delay-500">
+            <a href="auth.html" class="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl text-white font-medium transform hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300 ease-in-out hover:-translate-y-1">Get Started</a>
+            <a href="#benefits" class="px-8 py-4 border-2 border-indigo-400 text-indigo-400 rounded-xl hover:bg-indigo-400 hover:text-white transform hover:scale-105 hover:shadow-xl hover:shadow-indigo-400/30 transition-all duration-300 ease-in-out hover:-translate-y-1">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="py-20 bg-indigo-950/50">
+      <div class="container mx-auto px-4">
+        <h3 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent" data-aos="fade-up">Why Choose MetaRealFi?</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="property-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-3xl mb-4">🔒</div>
+            <h4 class="text-xl font-semibold mb-2">Secure Investment</h4>
+            <p class="text-indigo-200">Blockchain-backed ownership tokens ensure complete security and transparency</p>
+          </div>
+          <div class="property-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="text-3xl mb-4">💎</div>
+            <h4 class="text-xl font-semibold mb-2">Premium Properties</h4>
+            <p class="text-indigo-200">Access high-value real estate opportunities with minimal investment</p>
+          </div>
+          <div class="property-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="text-3xl mb-4">📈</div>
+            <h4 class="text-xl font-semibold mb-2">Smart Returns</h4>
+            <p class="text-indigo-200">Earn passive income through rental yields and property appreciation</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Properties -->
+    <section class="py-20">
+      <div class="container mx-auto px-4">
+        <h3 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent" data-aos="fade-up">Featured Properties</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="property-card hover-scale" data-aos="fade-up" data-aos-delay="100">
+            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="w-full h-48 object-cover rounded-lg mb-4" alt="Luxury Villa">
+            <h4 class="text-xl font-semibold mb-2">Luxury Villa</h4>
+            <p class="text-indigo-200 mb-4">Premium property in prime location</p>
+            <div class="flex justify-between items-center">
+              <span class="price-tag">$250,000</span>
+              <span class="roi-badge">12% ROI</span>
+            </div>
+          </div>
+          <div class="property-card hover-scale" data-aos="fade-up" data-aos-delay="200">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="w-full h-48 object-cover rounded-lg mb-4" alt="Modern Apartment">
+            <h4 class="text-xl font-semibold mb-2">Modern Apartment</h4>
+            <p class="text-indigo-200 mb-4">Contemporary living space</p>
+            <div class="flex justify-between items-center">
+              <span class="price-tag">$180,000</span>
+              <span class="roi-badge">10% ROI</span>
+            </div>
+          </div>
+          <div class="property-card hover-scale" data-aos="fade-up" data-aos-delay="300">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="w-full h-48 object-cover rounded-lg mb-4" alt="Beach House">
+            <h4 class="text-xl font-semibold mb-2">Beach House</h4>
+            <p class="text-indigo-200 mb-4">Oceanfront investment opportunity</p>
+            <div class="flex justify-between items-center">
+              <span class="price-tag">$320,000</span>
+              <span class="roi-badge">15% ROI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-indigo-950/50">
+      <div class="container mx-auto px-4">
+        <h3 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent" data-aos="fade-up">What Our Investors Say</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="property-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-indigo-400 text-4xl mb-4">"</div>
+            <p class="text-indigo-200 mb-4">MetaRealFi has revolutionized how I invest in real estate. The platform is intuitive and the returns are impressive.</p>
+            <div class="flex items-center">
+              <div class="w-12 h-12 rounded-full bg-indigo-500 mr-4"></div>
+              <div>
+                <h4 class="font-semibold">John Smith</h4>
+                <p class="text-indigo-300">Early Investor</p>
+              </div>
+            </div>
+          </div>
+          <div class="property-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="text-indigo-400 text-4xl mb-4">"</div>
+            <p class="text-indigo-200 mb-4">The transparency and security offered by blockchain technology give me peace of mind with my investments.</p>
+            <div class="flex items-center">
+              <div class="w-12 h-12 rounded-full bg-indigo-500 mr-4"></div>
+              <div>
+                <h4 class="font-semibold">Sarah Johnson</h4>
+                <p class="text-indigo-300">Property Investor</p>
+              </div>
+            </div>
+          </div>
+          <div class="property-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="text-indigo-400 text-4xl mb-4">"</div>
+            <p class="text-indigo-200 mb-4">Being able to invest in premium properties with a small capital has opened up new opportunities for me.</p>
+            <div class="flex items-center">
+              <div class="w-12 h-12 rounded-full bg-indigo-500 mr-4"></div>
+              <div>
+                <h4 class="font-semibold">Michael Chen</h4>
+                <p class="text-indigo-300">Tech Investor</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-indigo-950 py-8 mt-20">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="space-y-4">
+          <h4 class="text-xl font-bold text-white">MetaRealFi</h4>
+          <p class="text-gray-300">Transforming real estate through blockchain.</p>
+        </div>
+        <div class="space-y-4">
+          <h4 class="text-lg font-semibold text-white">Quick Links</h4>
+          <div class="grid grid-cols-2 gap-2">
+            <a href="#" class="text-gray-300 hover:text-indigo-400">About</a>
+            <a href="#" class="text-gray-300 hover:text-indigo-400">Properties</a>
+            <a href="#" class="text-gray-300 hover:text-indigo-400">How It Works</a>
+            <a href="#" class="text-gray-300 hover:text-indigo-400">Support</a>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <h4 class="text-lg font-semibold text-white">Contact</h4>
+          <a href="#" class="gradient-button inline-block text-center">Get Started</a>
+        </div>
+      </div>
+      <div class="mt-8 pt-6 border-t border-indigo-900 text-center text-gray-400">
+        <p>&copy; 2024 MetaRealFi. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="index.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

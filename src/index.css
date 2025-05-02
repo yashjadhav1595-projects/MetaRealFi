@@ -1,0 +1,203 @@
+@import './styles/animations.css';
+
+html {
+  scroll-behavior: smooth;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #1e1b4b, #312e81); 
+}
+/* Dashboard specific styles */
+.dashboard-container {
+  @apply bg-gradient-to-br from-indigo-950 to-indigo-900 min-h-screen;
+}
+
+.dashboard-glass {
+  @apply glass-morphism backdrop-blur-md bg-indigo-900/20 border border-indigo-500/20;
+}
+
+.dashboard-card {
+  @apply glass-card hover:glass-morphism transition-all duration-300;
+}
+
+.dashboard-header {
+  @apply sticky top-0 z-50 bg-indigo-900/95 backdrop-blur-md border-b border-indigo-500/30;
+}
+
+.dashboard-nav-item {
+  @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2;
+}
+
+.dashboard-nav-item.active {
+  @apply bg-indigo-600/50 text-white shadow-lg shadow-indigo-500/20;
+}
+
+.dashboard-content {
+  @apply p-4 md:p-6 max-w-7xl mx-auto;
+}
+
+.dashboard-section {
+  @apply glass-card p-6 rounded-xl mb-6;
+}
+
+.dashboard-chart {
+  @apply glass-card p-4 rounded-xl;
+}
+
+.dashboard-table {
+  @apply w-full glass-card rounded-lg overflow-hidden;
+}
+
+.dashboard-button {
+  @apply cyber-button hover:glass-morphism transition-all duration-300;
+}
+
+.dashboard-input {
+  @apply cyber-input glass-card focus:glass-morphism;
+}
+
+.dashboard-stat {
+  @apply glass-card p-4 rounded-xl text-center;
+}
+
+.dashboard-stat-value {
+  @apply text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent;
+}
+
+.dashboard-stat-label {
+  @apply text-sm text-indigo-200 mt-2;
+}
+
+.dashboard-transaction {
+  @apply glass-card p-4 rounded-lg mb-2 last:mb-0;
+}
+
+.dashboard-modal {
+  @apply glass-morphism p-6 rounded-xl max-w-md mx-auto;
+}
+
+.dashboard-tooltip {
+  @apply glass-card px-3 py-1.5 rounded-lg text-sm;
+}
+
+.dashboard-dropdown {
+  @apply glass-card absolute right-0 mt-2 w-48 py-2 rounded-lg shadow-xl;
+}
+
+.dashboard-notification {
+  @apply glass-card p-3 rounded-lg mb-2 last:mb-0;
+}
+
+.dashboard-progress {
+  @apply glass-card h-2 rounded-full overflow-hidden;
+}
+
+.dashboard-progress-bar {
+  @apply bg-gradient-to-r from-indigo-400 to-purple-500 h-full;
+}
+
+.dashboard-tab {
+  @apply cyber-tab hover:glass-morphism;
+}
+
+.dashboard-tab.active {
+  @apply bg-indigo-600/50 text-white shadow-lg shadow-indigo-500/20;
+}
+
+.dashboard-badge {
+  @apply cyber-badge glass-card;
+}
+
+.dashboard-details-box {
+  @apply glass-card p-4 rounded-lg;
+}
+
+.dashboard-hover-lift {
+  @apply hover-lift glass-card;
+}
+
+.dashboard-neon-text {
+  @apply neon-text;
+}
+
+.dashboard-cyber-text {
+  @apply cyber-text;
+}
+
+.dashboard-section-heading {
+  @apply section-heading mb-6;
+}
+
+.dashboard-footer-link {
+  @apply footer-link;
+}
+
+.dashboard-social-icon {
+  @apply social-icon-hover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard-nav-item {
+    @apply px-3 py-1.5 text-xs;
+  }
+  
+  .dashboard-section {
+    @apply p-4;
+  }
+  
+  .dashboard-stat-value {
+    @apply text-2xl;
+  }
+}
+
+@layer components {
+  /* Base glass effects */
+  .glass-morphism {
+    @apply backdrop-blur-md bg-indigo-900/20 border border-indigo-500/20 transition-all duration-300;
+  }
+
+  .glass-card {
+    @apply backdrop-blur-md bg-indigo-900/10 border border-indigo-500/10 rounded-lg transition-all duration-300;
+  }
+
+  /* Hover effects */
+  .hover\:glass-morphism:hover {
+    @apply backdrop-blur-lg bg-indigo-900/30 border-indigo-500/30 shadow-lg shadow-indigo-500/20;
+  }
+
+  /* Cyber components */
+  .cyber-tab {
+    @apply px-4 py-2 rounded-lg text-indigo-200 hover:text-white transition-all duration-300;
+  }
+
+  /* Dashboard tab specific */
+  .dashboard-tab {
+    @apply px-4 py-2 rounded-lg text-indigo-200 hover:text-white transition-all duration-300;
+  }
+
+  .dashboard-tab:hover {
+    @apply backdrop-blur-lg bg-indigo-900/30 border-indigo-500/30 shadow-lg shadow-indigo-500/20;
+  }
+}
+
+.dashboard-card {
+  @apply glass-card transition-all duration-300;
+}
+
+.dashboard-card:hover {
+  @apply glass-morphism transform -translate-y-1 shadow-lg shadow-indigo-500/20;
+}
