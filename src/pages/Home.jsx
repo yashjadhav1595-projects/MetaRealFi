@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AOS from 'aos';
+import 'aos/dist/aos.css';
 import Header from '../components/Header';
 import VideoBackground from '../components/VideoBackground';
 import HeroSection from '../components/HeroSection';
