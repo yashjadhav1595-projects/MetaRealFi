@@ -9,6 +9,7 @@ import FeaturedProperties from '../components/FeaturedProperties';
 import Testimonials from '../components/Testimonials';
 import Footer from '../components/Footer';
 import Contact from '../components/Contact';
+import { Analytics } from '@vercel/analytics/react';
 
 const Home = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -41,6 +42,7 @@ const Home = () => {
         </div>
       </main>
       <Footer />
+      <Analytics />
     </div>
   );
 };
