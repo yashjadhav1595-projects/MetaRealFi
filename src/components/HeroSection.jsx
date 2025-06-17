@@ -66,7 +66,7 @@ const HeroSection = () => {
           >
             <div className="relative h-full w-full transform rotate-y-12 preserve-3d">
               <img 
-                src="/assets/future-city.jpg" 
+                src="public/assets/future-city.jpg" 
                 alt="Futuristic Real Estate"
                 className="absolute inset-0 w-full h-full object-cover rounded-2xl hero-image"
               />
